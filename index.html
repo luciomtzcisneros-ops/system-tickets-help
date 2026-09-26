@@ -1,217 +1,111 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IT Help Desk - Sistema de Tickets</title>
-    <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        .ticket-alta {
-            border-left: 5px solid #dc3545 !important;
-            background-color: #fff8f8;
-        }
-        .ticket-leido {
-            opacity: 0.7;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IT Help - Sistema de Tickets</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="estilos.css">
 </head>
-<body class="bg-light">
-    <div class="container py-4">
-        <header class="pb-3 mb-4 border-bottom d-flex justify-content-between align-items-center">
-            <span class="fs-4 fw-bold text-primary">⚙️ IT Help Desk</span>
-            <span class="badge bg-danger fs-6" id="contador-urgentes">0 Tickets Urgentes</span>
-        </header>
+<body>
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-dark bg-dark shadow-sm">
+    <div class="container">
+      <span class="navbar-brand mb-0 h1">
+        <i class="bi bi-headset"></i> IT Help · Sistema de Tickets
+      </span>
+      <span class="badge bg-danger" id="urgentCounter">
+        <i class="bi bi-exclamation-triangle-fill"></i> 0 urgentes
+      </span>
+    </div>
+  </nav>
 
-        <div class="row g-4">
-            <!-- Formulario -->
+  <main class="container my-4">
+
+    <!-- FORMULARIO -->
+    <div class="card shadow-sm mb-4">
+      <div class="card-header bg-primary text-white">
+        <i class="bi bi-pencil-square"></i> Nuevo Ticket
+      </div>
+      <div class="card-body">
+        <form id="ticketForm" novalidate>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Nombre</label>
+              <input type="text" class="form-control" id="nombre" required>
+              <div class="invalid-feedback">Mínimo 3 caracteres.</div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Email</label>
+              <input type="email" class="form-control" id="email" required>
+              <div class="invalid-feedback">Email con formato válido.</div>
+            </div>
             <div class="col-md-4">
-                <div class="card shadow-sm">
-                    <div class="card-header bg-dark text-white fw-bold">Nuevo Ticket de Soporte</div>
-                    <div class="card-body">
-                        <form id="ticketForm" novalidate>
-                            <div class="mb-3">
-                                <label for="nombre" class="form-label">Nombre</label>
-                                <input type="text" class="form-control" id="nombre" required minlength="3">
-                                <div class="invalid-feedback">Mínimo 3 caracteres.</div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="email" class="form-label">Email</label>
-                                <input type="email" class="form-control" id="email" required>
-                                <div class="invalid-feedback">Formato de email inválido.</div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="prioridad" class="form-label">Prioridad</label>
-                                <select class="form-select" id="prioridad">
-                                    <option value="baja">Baja</option>
-                                    <option value="normal" selected>Normal</option>
-                                    <option value="alta">Alta</option>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label for="mensaje" class="form-label">Mensaje</label>
-                                <textarea class="form-control" id="mensaje" rows="3" required minlength="10"></textarea>
-                                <div class="invalid-feedback">Mínimo 10 caracteres.</div>
-                            </div>
-                            <button type="submit" class="btn btn-primary w-100">Enviar Ticket</button>
-                        </form>
-                    </div>
-                </div>
+              <label class="form-label">Prioridad</label>
+              <select class="form-select" id="prioridad">
+                <option value="baja">Baja</option>
+                <option value="normal" selected>Normal</option>
+                <option value="alta">Alta</option>
+              </select>
             </div>
-
-            <!-- Listado y Controles -->
-            <div class="col-md-8">
-                <div class="card shadow-sm mb-3">
-                    <div class="card-body row g-2">
-                        <div class="col-sm-6">
-                            <input type="text" id="buscarTexto" class="form-control" placeholder="🔍 Buscar en mensajes...">
-                        </div>
-                        <div class="col-sm-6">
-                            <select id="filtrarPrioridad" class="form-select">
-                                <option value="todos">Todos las prioridades</option>
-                                <option value="baja">Prioridad Baja</option>
-                                <option value="normal">Prioridad Normal</option>
-                                <option value="alta">Prioridad Alta</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="listaTickets" class="d-flex flex-column gap-3">
-                    <!-- Aquí se renderizan los tickets -->
-                </div>
+            <div class="col-12">
+              <label class="form-label">Mensaje</label>
+              <textarea class="form-control" id="mensaje" rows="3" required></textarea>
+              <div class="invalid-feedback">Mínimo 10 caracteres.</div>
             </div>
-        </div>
+          </div>
+          <div class="mt-3 d-flex gap-2">
+            <button type="submit" class="btn btn-primary">
+              <i class="bi bi-send"></i> Publicar Ticket
+            </button>
+            <button type="reset" class="btn btn-outline-secondary">
+              <i class="bi bi-x-circle"></i> Limpiar
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
 
-    <!-- JavaScript -->
-    <script>
-        // Cargar desde localStorage o inicializar vacio
-        let tickets = JSON.parse(localStorage.getItem('tickets')) || [];
+    <!-- FILTROS -->
+    <div class="card shadow-sm mb-4">
+      <div class="card-body">
+        <div class="row g-2 align-items-center">
+          <div class="col-md-4">
+            <label class="form-label mb-1 small fw-bold">Filtrar por prioridad</label>
+            <select class="form-select form-select-sm" id="filterPriority">
+              <option value="all">Todas</option>
+              <option value="alta">Alta</option>
+              <option value="normal">Normal</option>
+              <option value="baja">Baja</option>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label mb-1 small fw-bold">Buscar texto</label>
+            <input type="text" class="form-control form-control-sm" id="searchText" placeholder="Buscar en mensajes...">
+          </div>
+          <div class="col-md-4 d-flex align-items-end">
+            <button class="btn btn-sm btn-outline-danger w-100" id="clearAll">
+              <i class="bi bi-trash"></i> Borrar todos
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
 
-        const form = document.getElementById('ticketForm');
-        const listaTickets = document.getElementById('listaTickets');
-        const contadorUrgentes = document.getElementById('contador-urgentes');
-        const buscarTexto = document.getElementById('buscarTexto');
-        const filtrarPrioridad = document.getElementById('filtrarPrioridad');
+    <!-- LISTA DE TICKETS -->
+    <h5 class="mb-3">
+      <i class="bi bi-list-ul"></i> Lista de Tickets 
+      <span class="badge bg-secondary" id="totalCounter">0</span>
+    </h5>
+    <div id="ticketList" class="row g-3"></div>
 
-        // Control de flujo (Demostración de Switch)
-        function obtenerClasePrioridad(prioridad) {
-            switch(prioridad) {
-                case 'alta': return 'ticket-alta border-start-0';
-                case 'normal': return 'border-start border-primary border-4';
-                case 'baja': return 'border-start border-secondary border-4';
-                default: return '';
-            }
-        }
+  </main>
 
-        // Actualizar UI
-        function renderTickets() {
-            listaTickets.innerHTML = '';
-            const filtroTexto = buscarTexto.value.toLowerCase();
-            const filtroPrioridad = filtrarPrioridad.value;
+  <footer class="text-center text-muted py-4">
+    <small>&copy; 2025 IT Help · Demo SPA con Bootstrap + localStorage</small>
+  </footer>
 
-            // Filtrar tickets
-            const ticketsFiltrados = tickets.filter(t => {
-                const cumpleTexto = t.mensaje.toLowerCase().includes(filtroTexto) || t.nombre.toLowerCase().includes(filtroTexto);
-                const cumplePrioridad = filtroPrioridad === 'todos' || t.prioridad === filtroPrioridad;
-                return cumpleTexto && cumplePrioridad;
-            });
-
-            // Contar urgentes totales (Demostración de control de flujo recorriendo la lista)
-            let urgentes = 0;
-            for (let i = 0; i < tickets.length; i++) {
-                if (tickets[i].prioridad === 'alta') {
-                    urgentes++;
-                }
-            }
-            contadorUrgentes.innerText = `${urgentes} Ticket${urgentes !== 1 ? 's' : ''} Urgente${urgentes !== 1 ? 'es' : ''}`;
-
-            if(ticketsFiltrados.length === 0) {
-                listaTickets.innerHTML = '<div class="alert alert-info text-center">No se encontraron tickets.</div>';
-                return;
-            }
-
-            // Renderizar (más recientes primero)
-            ticketsFiltrados.forEach(t => {
-                const badgeColor = t.prioridad === 'alta' ? 'danger' : (t.prioridad === 'normal' ? 'primary' : 'secondary');
-                const cardClase = obtenerClasePrioridad(t.prioridad);
-                const leidoClase = t.leido ? 'ticket-leido' : '';
-
-                const item = document.createElement('div');
-                item.className = `card shadow-sm ${cardClase} ${leidoClase}`;
-                item.innerHTML = `
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-start mb-2">
-                            <div>
-                                <h5 class="card-title mb-0 d-inline-block me-2">${t.nombre}</h5>
-                                <span class="badge bg-${badgeColor}">${t.prioridad.toUpperCase()}</span>
-                            </div>
-                            <small class="text-muted">${t.fecha}</small>
-                        </div>
-                        <h6 class="card-subtitle mb-2 text-muted small">${t.email}</h6>
-                        <p class="card-text">${t.mensaje}</p>
-                        <div class="d-flex justify-content-end gap-2">
-                            <button class="btn btn-sm ${t.leido ? 'btn-outline-secondary' : 'btn-outline-success'}" onclick="alternarLeido(${t.id})">
-                                ${t.leido ? 'Marcar no leído' : 'Marcar leído'}
-                            </button>
-                            <button class="btn btn-sm btn-outline-danger" onclick="eliminarTicket(${t.id})">Eliminar</button>
-                        </div>
-                    </div>
-                `;
-                listaTickets.appendChild(item);
-            });
-        }
-
-        // Evento Submit
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            if (!form.checkValidity()) {
-                e.stopPropagation();
-                form.classList.add('was-validated');
-                return;
-            }
-
-            const nuevoTicket = {
-                id: Date.now(),
-                nombre: document.getElementById('nombre').value.trim(),
-                email: document.getElementById('email').value.trim(),
-                prioridad: document.getElementById('prioridad').value,
-                mensaje: document.getElementById('mensaje').value.trim(),
-                fecha: new Date().toLocaleString(),
-                leido: false
-            };
-
-            tickets.unshift(nuevoTicket); // Agregar arriba (más reciente)
-            localStorage.setItem('tickets', JSON.stringify(tickets));
-            
-            // Resetear formulario
-            form.reset();
-            form.classList.remove('was-validated');
-            
-            renderTickets();
-        });
-
-        // Funciones adicionales
-        function eliminarTicket(id) {
-            tickets = tickets.filter(t => t.id !== id);
-            localStorage.setItem('tickets', JSON.stringify(tickets));
-            renderTickets();
-        }
-
-        function alternarLeido(id) {
-            tickets = tickets.map(t => t.id === id ? { ...t, leido: !t.leido } : t);
-            localStorage.setItem('tickets', JSON.stringify(tickets));
-            renderTickets();
-        }
-
-        // Filtros en tiempo real
-        buscarTexto.addEventListener('input', renderTickets);
-        filtrarPrioridad.addEventListener('change', renderTickets);
-
-        // Render inicial
-        renderTickets();
-    </script>
+  <script src="app.js"></script>
 </body>
 </html>
